@@ -1,7 +1,37 @@
 import mongoose, { Schema } from "mongoose";
-import { User } from "./user/user.interface";
+import { Address, Order, User as UserModel } from "./user/user.interface";
 
-const userSchema = new Schema<User>({
+const userAddressSchema = new Schema<Address>({
+  street: {
+    type: String,
+    required: true,
+  },
+  city: {
+    type: String,
+    required: true,
+  },
+  country: {
+    type: String,
+    required: true,
+  },
+});
+
+const userOrderSchema = new Schema<Order>({
+    productName: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true
+    },
+    quantity: {
+        type: Number,
+        required: true
+    }
+})
+
+const userSchema = new Schema<UserModel>({
   userId: {
     type: Number,
     required: true,
@@ -17,8 +47,14 @@ const userSchema = new Schema<User>({
     required: true,
   },
   fullName: {
-    type: String,
-    required: true,
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
   },
   age: {
     type: Number,
@@ -37,15 +73,14 @@ const userSchema = new Schema<User>({
     required: true,
   },
   address: {
-    type: String,
+    type: userAddressSchema,
     required: true,
   },
   orders: {
-    type: String,
-    required: true,
+    type: [userOrderSchema]
   },
 });
 
-const UserModel = mongoose.model<User>("User", userSchema);
+const UserModel = mongoose.model<UserModel>('User', userSchema);
 
 export default UserModel;
